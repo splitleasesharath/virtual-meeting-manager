@@ -1,0 +1,285 @@
+/**
+ * Virtual Meeting Manager Styles
+ * Based on Bubble design system specifications
+ */
+
+/* Main Container */
+.vmOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.vmContainer {
+  background: white;
+  border-radius: 10px;
+  padding: 24px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+/* Header */
+.vmHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 12px;
+}
+
+.vmHeaderTitle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.vmIcon {
+  font-size: 24px;
+  display: inline-block;
+}
+
+.vmTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: color 0.2s;
+}
+
+.closeBtn:hover {
+  color: #000;
+}
+
+.backBtn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 8px;
+  color: #6b7280;
+  transition: color 0.2s;
+}
+
+.backBtn:hover {
+  color: #000;
+}
+
+/* Description Text */
+.vmDescription {
+  color: #6b7280;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+/* Button Styles */
+.buttonGroup {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.buttonPrimary {
+  background: #7b2cbf;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  flex: 1;
+}
+
+.buttonPrimary:hover:not(:disabled) {
+  background: #6a1fa8;
+}
+
+.buttonPrimary:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.buttonDecline {
+  background: #ffb3ba;
+  color: #dc2626;
+  padding: 12px 24px;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  flex: 1;
+}
+
+.buttonDecline:hover {
+  background: #ffa0a8;
+}
+
+.buttonDanger {
+  background: #dc2626;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  flex: 1;
+}
+
+.buttonDanger:hover {
+  background: #c41e1e;
+}
+
+.buttonOutline {
+  background: white;
+  color: #3b82f6;
+  padding: 12px 24px;
+  border-radius: 8px;
+  border: 2px solid #3b82f6;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex: 1;
+}
+
+.buttonOutline:hover {
+  background: #eff6ff;
+}
+
+.buttonSuccess {
+  background: #10b981;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  width: 100%;
+}
+
+.buttonSuccess:hover:not(:disabled) {
+  background: #059669;
+}
+
+.buttonSuccess:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+/* Info Box */
+.infoBox {
+  background: #dbeafe;
+  padding: 16px;
+  border-radius: 8px;
+  margin: 16px 0;
+  font-size: 14px;
+  color: #1e3a8a;
+  line-height: 1.5;
+}
+
+/* Time Slots */
+.timeSlots {
+  margin: 20px 0;
+}
+
+.timeSlotOption {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  margin-bottom: 8px;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.timeSlotOption:hover {
+  background: #f9fafb;
+}
+
+.timeSlotOption input[type='radio'] {
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+/* Loading State */
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #6b7280;
+}
+
+/* Error Message */
+.error {
+  background: #fee2e2;
+  color: #dc2626;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+/* Success Message */
+.success {
+  background: #d1fae5;
+  color: #065f46;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+/* Warning Text */
+.warningText {
+  color: #dc2626;
+  font-size: 14px;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .vmContainer {
+    max-width: 100%;
+    padding: 16px;
+    border-radius: 0;
+  }
+
+  .buttonGroup {
+    flex-direction: column;
+  }
+
+  .vmTitle {
+    font-size: 18px;
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "name": "virtual-meeting-manager",
+  "version": "1.0.0",
+  "description": "React component for managing virtual meetings - converted from Bubble.io",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "jest",
+    "lint": "eslint src --ext .ts,.tsx",
+    "format": "prettier --write \"src/**/*.{ts,tsx,css}\""
+  },
+  "keywords": [
+    "react",
+    "virtual-meeting",
+    "calendar",
+    "scheduling",
+    "bubble-conversion"
+  ],
+  "author": "Split Lease",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/splitleasesharath/virtual-meeting-manager.git"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "dependencies": {
+    "date-fns": "^2.30.0",
+    "date-fns-tz": "^2.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.45.0",
+    "eslint-plugin-react": "^7.33.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "jest": "^29.6.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.0.0"
+  },
+  "files": [
+    "dist",
+    "src",
+    "README.md"
+  ]
+}

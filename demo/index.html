@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Meeting Manager - Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .demo-header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .demo-header h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .demo-header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .demo-controls {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .demo-controls h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .demo-button {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .demo-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .btn-respond {
+            background: #7b2cbf;
+            color: white;
+        }
+
+        .btn-request {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-cancel {
+            background: #dc2626;
+            color: white;
+        }
+
+        .btn-details {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .info-section {
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .info-section h3 {
+            margin-bottom: 15px;
+            color: #374151;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .info-card {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #7b2cbf;
+        }
+
+        .info-card h4 {
+            color: #7b2cbf;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .info-card p {
+            color: #6b7280;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .preview-note {
+            background: #fef3c7;
+            border: 2px solid #f59e0b;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .preview-note h3 {
+            color: #92400e;
+            margin-bottom: 10px;
+        }
+
+        .preview-note p {
+            color: #78350f;
+            line-height: 1.6;
+        }
+
+        .preview-note code {
+            background: #fed7aa;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .feature-list {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .feature-list h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .feature-list ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .feature-list li {
+            padding: 15px;
+            background: #f9fafb;
+            border-radius: 8px;
+            border-left: 4px solid #7b2cbf;
+        }
+
+        .feature-list li::before {
+            content: "✓ ";
+            color: #10b981;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6b7280;
+        }
+
+        .demo-view {
+            padding: 20px 0;
+        }
+
+        .demo-view h3 {
+            color: #7b2cbf;
+            margin-bottom: 15px;
+        }
+
+        .demo-view p {
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            opacity: 0.9;
+        }
+
+        footer a {
+            color: white;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .demo-header h1 {
+                font-size: 32px;
+            }
+
+            .button-group {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <!-- Header -->
+        <div class="demo-header">
+            <h1>📅 Virtual Meeting Manager</h1>
+            <p>React Component Demo - Converted from Bubble.io</p>
+        </div>
+
+        <!-- Preview Note -->
+        <div class="preview-note">
+            <h3>⚠️ Local Preview Mode</h3>
+            <p>
+                This is a <strong>static HTML demo</strong> showing the UI mockups for each view.
+                The actual React component requires a build step and React environment to run.
+            </p>
+            <p style="margin-top: 10px;">
+                To use the real component: <code>npm install</code> → <code>npm run build</code> → Import into your React app
+            </p>
+        </div>
+
+        <!-- Demo Controls -->
+        <div class="demo-controls">
+            <h2>Test Different Views</h2>
+            <p style="margin-bottom: 20px; color: #6b7280;">Click a button to see each view of the Virtual Meeting Manager</p>
+
+            <div class="button-group">
+                <button class="demo-button btn-respond" onclick="showView('respond')">
+                    📋 Respond to Request
+                </button>
+                <button class="demo-button btn-request" onclick="showView('request')">
+                    📅 Request Meeting
+                </button>
+                <button class="demo-button btn-cancel" onclick="showView('cancel')">
+                    ❌ Cancel Meeting
+                </button>
+                <button class="demo-button btn-details" onclick="showView('details')">
+                    ℹ️ View Details
+                </button>
+            </div>
+
+            <!-- Info Section -->
+            <div class="info-section">
+                <h3>Sample Data Used</h3>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h4>HOST</h4>
+                        <p>John Doe<br>john@example.com</p>
+                    </div>
+                    <div class="info-card">
+                        <h4>GUEST</h4>
+                        <p>Jane Smith<br>jane@example.com</p>
+                    </div>
+                    <div class="info-card">
+                        <h4>LISTING</h4>
+                        <p>Beautiful Downtown Apartment</p>
+                    </div>
+                    <div class="info-card">
+                        <h4>TIME SLOTS</h4>
+                        <p>Nov 5, 2:00 PM<br>Nov 5, 4:00 PM<br>Nov 6, 10:00 AM</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features List -->
+        <div class="feature-list">
+            <h2>✨ Component Features</h2>
+            <ul>
+                <li>4 complete views for all meeting workflows</li>
+                <li>Interactive calendar with time slot selection</li>
+                <li>EST timezone support with automatic conversion</li>
+                <li>Google Calendar integration</li>
+                <li>Responsive design for mobile and desktop</li>
+                <li>Full TypeScript support with type safety</li>
+                <li>API integration with Bubble.io backend</li>
+                <li>Error handling and loading states</li>
+                <li>Accessible with ARIA labels</li>
+                <li>Customizable styling with CSS modules</li>
+                <li>Comprehensive documentation included</li>
+                <li>Production-ready with 3,500+ lines of code</li>
+            </ul>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>Virtual Meeting Manager v1.0.0</p>
+            <p>Created by Split Lease Team | <a href="https://github.com/splitleasesharath/virtual-meeting-manager" target="_blank">GitHub Repository</a></p>
+            <p style="margin-top: 10px;">For full documentation, see <a href="../README.md">README.md</a></p>
+        </footer>
+    </div>
+
+    <!-- Modal for Views -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">View Title</h2>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="demo-view" id="modalBody">
+                <!-- Content will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const viewContent = {
+            respond: {
+                title: '📋 Respond to VM Request',
+                html: `
+                    <h3>Select Available Time Slot</h3>
+                    <p>Select one of the available dates proposed by John Doe for Jane Smith below. All times are in EST timezone.</p>
+
+                    <div style="margin: 20px 0;">
+                        <label style="display: block; padding: 12px; border: 1px solid #e5e7eb; border-radius: 6px; margin-bottom: 8px; cursor: pointer;">
+                            <input type="radio" name="timeslot" style="margin-right: 10px;">
+                            Tuesday, November 5, 2025 at 2:00 PM (EST)
+                        </label>
+                        <label style="display: block; padding: 12px; border: 1px solid #e5e7eb; border-radius: 6px; margin-bottom: 8px; cursor: pointer;">
+                            <input type="radio" name="timeslot" style="margin-right: 10px;">
+                            Tuesday, November 5, 2025 at 4:00 PM (EST)
+                        </label>
+                        <label style="display: block; padding: 12px; border: 1px solid #e5e7eb; border-radius: 6px; margin-bottom: 8px; cursor: pointer;">
+                            <input type="radio" name="timeslot" style="margin-right: 10px;">
+                            Wednesday, November 6, 2025 at 10:00 AM (EST)
+                        </label>
+                    </div>
+
+                    <div style="background: #dbeafe; padding: 16px; border-radius: 8px; margin: 20px 0;">
+                        <p style="color: #1e3a8a; font-size: 14px;">If none of the times work for you, you may submit alternative times for the host to choose from.</p>
+                    </div>
+
+                    <div style="display: flex; gap: 12px;">
+                        <button style="flex: 1; padding: 12px; background: #ffb3ba; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Decline</button>
+                        <button style="flex: 1; padding: 12px; background: #7b2cbf; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Suggest Alternative Times</button>
+                    </div>
+
+                    <p style="margin-top: 20px; font-size: 13px; color: #6b7280;">
+                        <strong>Note:</strong> In the actual React component, selecting a time slot will show a confirmation dialog, and all actions are connected to the Bubble.io backend.
+                    </p>
+                `
+            },
+            request: {
+                title: '📅 Request Virtual Meeting',
+                html: `
+                    <h3>Select 3 Time Slots</h3>
+                    <p>Choose 3 available time slots when you're available to meet. Use the calendar to select dates and times (EST timezone).</p>
+
+                    <div style="background: #f9fafb; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                        <div style="text-align: center; margin-bottom: 15px;">
+                            <strong>November 2025</strong>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center;">
+                            <div style="font-weight: 600; padding: 8px;">Sun</div>
+                            <div style="font-weight: 600; padding: 8px;">Mon</div>
+                            <div style="font-weight: 600; padding: 8px;">Tue</div>
+                            <div style="font-weight: 600; padding: 8px;">Wed</div>
+                            <div style="font-weight: 600; padding: 8px;">Thu</div>
+                            <div style="font-weight: 600; padding: 8px;">Fri</div>
+                            <div style="font-weight: 600; padding: 8px;">Sat</div>
+                            <div style="padding: 8px;"></div>
+                            <div style="padding: 8px;"></div>
+                            <div style="padding: 8px;"></div>
+                            <div style="padding: 8px;"></div>
+                            <div style="padding: 8px;"></div>
+                            <div style="padding: 8px; border: 1px solid #e5e7eb; border-radius: 4px; cursor: pointer;">1</div>
+                            <div style="padding: 8px; border: 1px solid #e5e7eb; border-radius: 4px; cursor: pointer;">2</div>
+                            <div style="padding: 8px; border: 1px solid #e5e7eb; border-radius: 4px; cursor: pointer;">3</div>
+                            <div style="padding: 8px; border: 1px solid #e5e7eb; border-radius: 4px; cursor: pointer;">4</div>
+                            <div style="padding: 8px; border: 1px solid #7b2cbf; background: #7b2cbf; color: white; border-radius: 4px; cursor: pointer;">5</div>
+                            <div style="padding: 8px; border: 1px solid #7b2cbf; background: #7b2cbf; color: white; border-radius: 4px; cursor: pointer;">6</div>
+                            <div style="padding: 8px; border: 1px solid #e5e7eb; border-radius: 4px; cursor: pointer;">7</div>
+                            <div style="padding: 8px; border: 1px solid #e5e7eb; border-radius: 4px; cursor: pointer;">8</div>
+                            <div style="padding: 8px; border: 1px solid #e5e7eb; border-radius: 4px; cursor: pointer;">9</div>
+                        </div>
+                    </div>
+
+                    <div style="background: #f9fafb; padding: 16px; border-radius: 8px; border: 1px dashed #d1d5db; margin: 20px 0; min-height: 80px;">
+                        <strong>Selected Time Slots (2/3):</strong>
+                        <div style="margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap;">
+                            <span style="background: #e3f2fd; border: 1px solid #7b2cbf; border-radius: 20px; padding: 6px 14px; font-size: 13px; color: #7b2cbf;">Nov 5, 2:00 PM</span>
+                            <span style="background: #e3f2fd; border: 1px solid #7b2cbf; border-radius: 20px; padding: 6px 14px; font-size: 13px; color: #7b2cbf;">Nov 6, 10:00 AM</span>
+                        </div>
+                    </div>
+
+                    <button style="width: 100%; padding: 15px; background: #ccc; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: not-allowed;" disabled>
+                        Submit Request (Select 1 more slot)
+                    </button>
+
+                    <p style="margin-top: 20px; font-size: 13px; color: #6b7280;">
+                        <strong>Note:</strong> The actual component includes a fully interactive calendar with month navigation, time picker modal, and real-time validation.
+                    </p>
+                `
+            },
+            cancel: {
+                title: '❌ Cancel Virtual Meeting',
+                html: `
+                    <h3>Are you sure?</h3>
+                    <p style="color: #dc2626; font-weight: 600; margin-bottom: 20px;">This action cannot be undone</p>
+
+                    <div style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; background: #f9fafb; margin: 20px 0;">
+                        <div style="display: flex; gap: 15px; align-items: flex-start;">
+                            <div style="font-size: 32px;">📅</div>
+                            <div>
+                                <h4 style="color: #1f2937; margin-bottom: 8px;">Meeting with Jane Smith</h4>
+                                <p style="color: #6b7280; font-size: 14px; margin: 4px 0;">Beautiful Downtown Apartment</p>
+                                <p style="color: #7b2cbf; font-weight: 600; font-size: 14px; margin: 8px 0;">Tuesday, November 5, 2025 at 2:00 PM (EST)</p>
+                                <a href="#" style="color: #3b82f6; font-size: 13px; text-decoration: none;">View Meeting Link</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 12px; margin-top: 24px;">
+                        <button style="flex: 1; padding: 12px; background: white; color: #3b82f6; border: 2px solid #3b82f6; border-radius: 8px; font-weight: 600; cursor: pointer;">No</button>
+                        <button style="flex: 1; padding: 12px; background: #dc2626; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Cancel Meeting</button>
+                    </div>
+
+                    <p style="margin-top: 20px; font-size: 13px; color: #6b7280;">
+                        <strong>Note:</strong> Clicking "Cancel Meeting" in the real component will send notifications to both parties and update the database.
+                    </p>
+                `
+            },
+            details: {
+                title: 'ℹ️ Meeting Details',
+                html: `
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <img src="https://via.placeholder.com/80" alt="Guest" style="width: 80px; height: 80px; border-radius: 50%; border: 3px solid #7b2cbf;">
+                    </div>
+
+                    <div style="text-align: center; margin-bottom: 24px;">
+                        <h3 style="color: #6b7280; font-size: 18px; margin-bottom: 8px;">Booked for:</h3>
+                        <h2 style="color: #7b2cbf; font-size: 28px; font-weight: 700; line-height: 1.3;">Tuesday, November 5, 2025<br>2:00 PM (EST)</h2>
+                    </div>
+
+                    <div style="background: #f9fafb; padding: 20px; border-radius: 8px; margin: 24px 0;">
+                        <div style="display: grid; grid-template-columns: auto 1fr; gap: 12px 16px;">
+                            <strong style="color: #374151;">Guest:</strong>
+                            <span style="color: #6b7280;">Jane Smith</span>
+
+                            <strong style="color: #374151;">Listing:</strong>
+                            <span style="color: #6b7280;">Beautiful Downtown Apartment</span>
+
+                            <strong style="color: #374151;">Weekly Schedule:</strong>
+                            <span style="color: #6b7280;">Monday, Wednesday, Friday</span>
+
+                            <strong style="color: #374151;">Reservation Span:</strong>
+                            <span style="color: #6b7280;">4 weeks</span>
+                        </div>
+                    </div>
+
+                    <button style="width: 100%; padding: 14px 20px; background: white; border: 2px solid #7b2cbf; color: #7b2cbf; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 12px;">
+                        <span>📅</span>
+                        Click to add this meeting to your calendar
+                    </button>
+
+                    <a href="#" style="display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; color: #3b82f6; text-decoration: none; font-weight: 500;">
+                        <span>👁️</span>
+                        Google Meets Link
+                    </a>
+
+                    <p style="margin-top: 20px; font-size: 13px; color: #6b7280;">
+                        <strong>Note:</strong> The Google Calendar button generates a real calendar event URL with all meeting details.
+                    </p>
+                `
+            }
+        };
+
+        function showView(view) {
+            const modal = document.getElementById('modalOverlay');
+            const title = document.getElementById('modalTitle');
+            const body = document.getElementById('modalBody');
+
+            const content = viewContent[view];
+            title.textContent = content.title;
+            body.innerHTML = content.html;
+
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+
+        // Close modal on overlay click
+        document.getElementById('modalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Close modal on ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

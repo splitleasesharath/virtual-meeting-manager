@@ -1,0 +1,54 @@
+/**
+ * Respond to VM Request Component Styles
+ */
+
+.container {
+  padding: 8px 0;
+}
+
+.alternativeSection {
+  margin-top: 24px;
+}
+
+.confirmDialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  z-index: 1100;
+  min-width: 300px;
+  max-width: 500px;
+}
+
+.confirmMessage {
+  font-size: 16px;
+  color: #1f2937;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.confirmTimeSlot {
+  font-weight: 600;
+  color: #7b2cbf;
+  margin: 8px 0;
+}
+
+.dialogButtons {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.dialogOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1050;
+}
