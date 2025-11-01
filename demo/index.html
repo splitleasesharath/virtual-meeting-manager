@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Virtual Meeting Manager - Demo</title>
+    <title>Virtual Meeting Manager - Interactive Demo</title>
     <style>
         * {
             margin: 0;
@@ -76,120 +76,10 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
 
-        .btn-respond {
-            background: #7b2cbf;
-            color: white;
-        }
-
-        .btn-request {
-            background: #10b981;
-            color: white;
-        }
-
-        .btn-cancel {
-            background: #dc2626;
-            color: white;
-        }
-
-        .btn-details {
-            background: #3b82f6;
-            color: white;
-        }
-
-        .info-section {
-            background: #f9fafb;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 20px;
-        }
-
-        .info-section h3 {
-            margin-bottom: 15px;
-            color: #374151;
-        }
-
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-        }
-
-        .info-card {
-            background: white;
-            padding: 15px;
-            border-radius: 6px;
-            border-left: 4px solid #7b2cbf;
-        }
-
-        .info-card h4 {
-            color: #7b2cbf;
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
-
-        .info-card p {
-            color: #6b7280;
-            font-size: 13px;
-            line-height: 1.5;
-        }
-
-        .preview-note {
-            background: #fef3c7;
-            border: 2px solid #f59e0b;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 30px;
-        }
-
-        .preview-note h3 {
-            color: #92400e;
-            margin-bottom: 10px;
-        }
-
-        .preview-note p {
-            color: #78350f;
-            line-height: 1.6;
-        }
-
-        .preview-note code {
-            background: #fed7aa;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-family: 'Courier New', monospace;
-        }
-
-        .feature-list {
-            background: white;
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-        }
-
-        .feature-list h2 {
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        .feature-list ul {
-            list-style: none;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 15px;
-        }
-
-        .feature-list li {
-            padding: 15px;
-            background: #f9fafb;
-            border-radius: 8px;
-            border-left: 4px solid #7b2cbf;
-        }
-
-        .feature-list li::before {
-            content: "✓ ";
-            color: #10b981;
-            font-weight: bold;
-            margin-right: 8px;
-        }
+        .btn-respond { background: #7b2cbf; color: white; }
+        .btn-request { background: #10b981; color: white; }
+        .btn-cancel { background: #dc2626; color: white; }
+        .btn-details { background: #3b82f6; color: white; }
 
         .modal-overlay {
             display: none;
@@ -213,11 +103,12 @@
             background: white;
             border-radius: 12px;
             padding: 30px;
-            max-width: 600px;
+            max-width: 650px;
             width: 100%;
-            max-height: 80vh;
+            max-height: 85vh;
             overflow-y: auto;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            position: relative;
         }
 
         .modal-header {
@@ -230,343 +121,579 @@
         .modal-close {
             background: none;
             border: none;
-            font-size: 24px;
+            font-size: 28px;
             cursor: pointer;
             color: #6b7280;
+            line-height: 1;
         }
 
-        .demo-view {
-            padding: 20px 0;
+        .time-slot-option {
+            display: block;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
         }
 
-        .demo-view h3 {
-            color: #7b2cbf;
-            margin-bottom: 15px;
+        .time-slot-option:hover {
+            background: #f9fafb;
         }
 
-        .demo-view p {
-            color: #6b7280;
-            line-height: 1.6;
-            margin-bottom: 15px;
+        .time-slot-option input {
+            margin-right: 10px;
         }
 
-        footer {
+        .button-primary {
+            padding: 12px 24px;
+            background: #7b2cbf;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .button-primary:hover {
+            background: #6a1fa8;
+        }
+
+        .button-decline {
+            padding: 12px 24px;
+            background: #ffb3ba;
+            color: #dc2626;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .info-box {
+            background: #dbeafe;
+            padding: 16px;
+            border-radius: 8px;
+            margin: 20px 0;
+            color: #1e3a8a;
+            font-size: 14px;
+        }
+
+        /* Calendar Styles */
+        .calendar-container {
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar-nav-btn {
+            background: white;
+            border: 1px solid #d1d5db;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .calendar-month {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
             text-align: center;
-            color: white;
-            margin-top: 40px;
-            opacity: 0.9;
         }
 
-        footer a {
+        .calendar-day-header {
+            font-weight: 600;
+            padding: 8px;
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            cursor: pointer;
+            background: white;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .calendar-day:hover:not(.disabled):not(.empty) {
+            background: #f3f4f6;
+            border-color: #7b2cbf;
+        }
+
+        .calendar-day.selected {
+            background: #7b2cbf;
             color: white;
-            text-decoration: underline;
+            border-color: #7b2cbf;
+        }
+
+        .calendar-day.disabled {
+            background: #f9fafb;
+            color: #d1d5db;
+            cursor: not-allowed;
+        }
+
+        .calendar-day.empty {
+            border: none;
+            background: transparent;
+            cursor: default;
+        }
+
+        /* Time Picker Modal */
+        .time-picker-modal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+            z-index: 1100;
+            max-height: 500px;
+            overflow-y: auto;
+            width: 90%;
+            max-width: 350px;
+        }
+
+        .time-picker-header {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #1f2937;
+            text-align: center;
+        }
+
+        .time-slot-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 8px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+        }
+
+        .time-slot-btn:hover:not(:disabled) {
+            background: #f3f4f6;
+            border-color: #7b2cbf;
+        }
+
+        .time-slot-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .time-slot-btn.selected-time {
+            background: #e3f2fd;
+            border-color: #7b2cbf;
+            color: #7b2cbf;
+            font-weight: 600;
+        }
+
+        /* Selected Slots Display */
+        .selected-slots {
+            background: #f9fafb;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px dashed #d1d5db;
+            margin: 20px 0;
+            min-height: 100px;
+        }
+
+        .slot-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #e3f2fd;
+            border: 1px solid #7b2cbf;
+            border-radius: 20px;
+            padding: 6px 12px;
+            margin: 4px;
+            font-size: 13px;
+            color: #7b2cbf;
+            font-weight: 500;
+        }
+
+        .remove-slot {
+            background: none;
+            border: none;
+            color: #dc2626;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .button-success {
+            width: 100%;
+            padding: 15px;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .button-success:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .backdrop {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 1050;
         }
 
         @media (max-width: 768px) {
-            .demo-header h1 {
-                font-size: 32px;
-            }
-
-            .button-group {
-                grid-template-columns: 1fr;
-            }
+            .demo-header h1 { font-size: 32px; }
+            .button-group { grid-template-columns: 1fr; }
+            .modal-content { padding: 20px; max-width: 100%; }
         }
     </style>
 </head>
 <body>
     <div class="demo-container">
-        <!-- Header -->
         <div class="demo-header">
             <h1>📅 Virtual Meeting Manager</h1>
-            <p>React Component Demo - Converted from Bubble.io</p>
+            <p>Interactive Demo - Full Calendar Functionality</p>
         </div>
 
-        <!-- Preview Note -->
-        <div class="preview-note">
-            <h3>⚠️ Local Preview Mode</h3>
-            <p>
-                This is a <strong>static HTML demo</strong> showing the UI mockups for each view.
-                The actual React component requires a build step and React environment to run.
-            </p>
-            <p style="margin-top: 10px;">
-                To use the real component: <code>npm install</code> → <code>npm run build</code> → Import into your React app
-            </p>
-        </div>
-
-        <!-- Demo Controls -->
         <div class="demo-controls">
             <h2>Test Different Views</h2>
-            <p style="margin-bottom: 20px; color: #6b7280;">Click a button to see each view of the Virtual Meeting Manager</p>
-
+            <p style="margin-bottom: 20px; color: #6b7280;">Click a button to test each workflow</p>
             <div class="button-group">
-                <button class="demo-button btn-respond" onclick="showView('respond')">
-                    📋 Respond to Request
-                </button>
-                <button class="demo-button btn-request" onclick="showView('request')">
-                    📅 Request Meeting
-                </button>
-                <button class="demo-button btn-cancel" onclick="showView('cancel')">
-                    ❌ Cancel Meeting
-                </button>
-                <button class="demo-button btn-details" onclick="showView('details')">
-                    ℹ️ View Details
-                </button>
-            </div>
-
-            <!-- Info Section -->
-            <div class="info-section">
-                <h3>Sample Data Used</h3>
-                <div class="info-grid">
-                    <div class="info-card">
-                        <h4>HOST</h4>
-                        <p>John Doe<br>john@example.com</p>
-                    </div>
-                    <div class="info-card">
-                        <h4>GUEST</h4>
-                        <p>Jane Smith<br>jane@example.com</p>
-                    </div>
-                    <div class="info-card">
-                        <h4>LISTING</h4>
-                        <p>Beautiful Downtown Apartment</p>
-                    </div>
-                    <div class="info-card">
-                        <h4>TIME SLOTS</h4>
-                        <p>Nov 5, 2:00 PM<br>Nov 5, 4:00 PM<br>Nov 6, 10:00 AM</p>
-                    </div>
-                </div>
+                <button class="demo-button btn-respond" onclick="showView('respond')">📋 Respond to Request</button>
+                <button class="demo-button btn-request" onclick="showView('request')">📅 Request Meeting</button>
+                <button class="demo-button btn-cancel" onclick="showView('cancel')">❌ Cancel Meeting</button>
+                <button class="demo-button btn-details" onclick="showView('details')">ℹ️ View Details</button>
             </div>
         </div>
-
-        <!-- Features List -->
-        <div class="feature-list">
-            <h2>✨ Component Features</h2>
-            <ul>
-                <li>4 complete views for all meeting workflows</li>
-                <li>Interactive calendar with time slot selection</li>
-                <li>EST timezone support with automatic conversion</li>
-                <li>Google Calendar integration</li>
-                <li>Responsive design for mobile and desktop</li>
-                <li>Full TypeScript support with type safety</li>
-                <li>API integration with Bubble.io backend</li>
-                <li>Error handling and loading states</li>
-                <li>Accessible with ARIA labels</li>
-                <li>Customizable styling with CSS modules</li>
-                <li>Comprehensive documentation included</li>
-                <li>Production-ready with 3,500+ lines of code</li>
-            </ul>
-        </div>
-
-        <!-- Footer -->
-        <footer>
-            <p>Virtual Meeting Manager v1.0.0</p>
-            <p>Created by Split Lease Team | <a href="https://github.com/splitleasesharath/virtual-meeting-manager" target="_blank">GitHub Repository</a></p>
-            <p style="margin-top: 10px;">For full documentation, see <a href="../README.md">README.md</a></p>
-        </footer>
     </div>
 
-    <!-- Modal for Views -->
     <div class="modal-overlay" id="modalOverlay">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="modalTitle">View Title</h2>
-                <button class="modal-close" onclick="closeModal()">×</button>
-            </div>
-            <div class="demo-view" id="modalBody">
-                <!-- Content will be inserted here -->
-            </div>
-        </div>
+        <div class="modal-content" id="modalContent"></div>
     </div>
 
     <script>
-        const viewContent = {
-            respond: {
-                title: '📋 Respond to VM Request',
-                html: `
-                    <h3>Select Available Time Slot</h3>
-                    <p>Select one of the available dates proposed by John Doe for Jane Smith below. All times are in EST timezone.</p>
-
-                    <div style="margin: 20px 0;">
-                        <label style="display: block; padding: 12px; border: 1px solid #e5e7eb; border-radius: 6px; margin-bottom: 8px; cursor: pointer;">
-                            <input type="radio" name="timeslot" style="margin-right: 10px;">
-                            Tuesday, November 5, 2025 at 2:00 PM (EST)
-                        </label>
-                        <label style="display: block; padding: 12px; border: 1px solid #e5e7eb; border-radius: 6px; margin-bottom: 8px; cursor: pointer;">
-                            <input type="radio" name="timeslot" style="margin-right: 10px;">
-                            Tuesday, November 5, 2025 at 4:00 PM (EST)
-                        </label>
-                        <label style="display: block; padding: 12px; border: 1px solid #e5e7eb; border-radius: 6px; margin-bottom: 8px; cursor: pointer;">
-                            <input type="radio" name="timeslot" style="margin-right: 10px;">
-                            Wednesday, November 6, 2025 at 10:00 AM (EST)
-                        </label>
-                    </div>
-
-                    <div style="background: #dbeafe; padding: 16px; border-radius: 8px; margin: 20px 0;">
-                        <p style="color: #1e3a8a; font-size: 14px;">If none of the times work for you, you may submit alternative times for the host to choose from.</p>
-                    </div>
-
-                    <div style="display: flex; gap: 12px;">
-                        <button style="flex: 1; padding: 12px; background: #ffb3ba; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Decline</button>
-                        <button style="flex: 1; padding: 12px; background: #7b2cbf; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Suggest Alternative Times</button>
-                    </div>
-
-                    <p style="margin-top: 20px; font-size: 13px; color: #6b7280;">
-                        <strong>Note:</strong> In the actual React component, selecting a time slot will show a confirmation dialog, and all actions are connected to the Bubble.io backend.
-                    </p>
-                `
-            },
-            request: {
-                title: '📅 Request Virtual Meeting',
-                html: `
-                    <h3>Select 3 Time Slots</h3>
-                    <p>Choose 3 available time slots when you're available to meet. Use the calendar to select dates and times (EST timezone).</p>
-
-                    <div style="background: #f9fafb; padding: 20px; border-radius: 8px; margin: 20px 0;">
-                        <div style="text-align: center; margin-bottom: 15px;">
-                            <strong>November 2025</strong>
-                        </div>
-                        <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center;">
-                            <div style="font-weight: 600; padding: 8px;">Sun</div>
-                            <div style="font-weight: 600; padding: 8px;">Mon</div>
-                            <div style="font-weight: 600; padding: 8px;">Tue</div>
-                            <div style="font-weight: 600; padding: 8px;">Wed</div>
-                            <div style="font-weight: 600; padding: 8px;">Thu</div>
-                            <div style="font-weight: 600; padding: 8px;">Fri</div>
-                            <div style="font-weight: 600; padding: 8px;">Sat</div>
-                            <div style="padding: 8px;"></div>
-                            <div style="padding: 8px;"></div>
-                            <div style="padding: 8px;"></div>
-                            <div style="padding: 8px;"></div>
-                            <div style="padding: 8px;"></div>
-                            <div style="padding: 8px; border: 1px solid #e5e7eb; border-radius: 4px; cursor: pointer;">1</div>
-                            <div style="padding: 8px; border: 1px solid #e5e7eb; border-radius: 4px; cursor: pointer;">2</div>
-                            <div style="padding: 8px; border: 1px solid #e5e7eb; border-radius: 4px; cursor: pointer;">3</div>
-                            <div style="padding: 8px; border: 1px solid #e5e7eb; border-radius: 4px; cursor: pointer;">4</div>
-                            <div style="padding: 8px; border: 1px solid #7b2cbf; background: #7b2cbf; color: white; border-radius: 4px; cursor: pointer;">5</div>
-                            <div style="padding: 8px; border: 1px solid #7b2cbf; background: #7b2cbf; color: white; border-radius: 4px; cursor: pointer;">6</div>
-                            <div style="padding: 8px; border: 1px solid #e5e7eb; border-radius: 4px; cursor: pointer;">7</div>
-                            <div style="padding: 8px; border: 1px solid #e5e7eb; border-radius: 4px; cursor: pointer;">8</div>
-                            <div style="padding: 8px; border: 1px solid #e5e7eb; border-radius: 4px; cursor: pointer;">9</div>
-                        </div>
-                    </div>
-
-                    <div style="background: #f9fafb; padding: 16px; border-radius: 8px; border: 1px dashed #d1d5db; margin: 20px 0; min-height: 80px;">
-                        <strong>Selected Time Slots (2/3):</strong>
-                        <div style="margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap;">
-                            <span style="background: #e3f2fd; border: 1px solid #7b2cbf; border-radius: 20px; padding: 6px 14px; font-size: 13px; color: #7b2cbf;">Nov 5, 2:00 PM</span>
-                            <span style="background: #e3f2fd; border: 1px solid #7b2cbf; border-radius: 20px; padding: 6px 14px; font-size: 13px; color: #7b2cbf;">Nov 6, 10:00 AM</span>
-                        </div>
-                    </div>
-
-                    <button style="width: 100%; padding: 15px; background: #ccc; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: not-allowed;" disabled>
-                        Submit Request (Select 1 more slot)
-                    </button>
-
-                    <p style="margin-top: 20px; font-size: 13px; color: #6b7280;">
-                        <strong>Note:</strong> The actual component includes a fully interactive calendar with month navigation, time picker modal, and real-time validation.
-                    </p>
-                `
-            },
-            cancel: {
-                title: '❌ Cancel Virtual Meeting',
-                html: `
-                    <h3>Are you sure?</h3>
-                    <p style="color: #dc2626; font-weight: 600; margin-bottom: 20px;">This action cannot be undone</p>
-
-                    <div style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; background: #f9fafb; margin: 20px 0;">
-                        <div style="display: flex; gap: 15px; align-items: flex-start;">
-                            <div style="font-size: 32px;">📅</div>
-                            <div>
-                                <h4 style="color: #1f2937; margin-bottom: 8px;">Meeting with Jane Smith</h4>
-                                <p style="color: #6b7280; font-size: 14px; margin: 4px 0;">Beautiful Downtown Apartment</p>
-                                <p style="color: #7b2cbf; font-weight: 600; font-size: 14px; margin: 8px 0;">Tuesday, November 5, 2025 at 2:00 PM (EST)</p>
-                                <a href="#" style="color: #3b82f6; font-size: 13px; text-decoration: none;">View Meeting Link</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div style="display: flex; gap: 12px; margin-top: 24px;">
-                        <button style="flex: 1; padding: 12px; background: white; color: #3b82f6; border: 2px solid #3b82f6; border-radius: 8px; font-weight: 600; cursor: pointer;">No</button>
-                        <button style="flex: 1; padding: 12px; background: #dc2626; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Cancel Meeting</button>
-                    </div>
-
-                    <p style="margin-top: 20px; font-size: 13px; color: #6b7280;">
-                        <strong>Note:</strong> Clicking "Cancel Meeting" in the real component will send notifications to both parties and update the database.
-                    </p>
-                `
-            },
-            details: {
-                title: 'ℹ️ Meeting Details',
-                html: `
-                    <div style="text-align: center; margin-bottom: 20px;">
-                        <img src="https://via.placeholder.com/80" alt="Guest" style="width: 80px; height: 80px; border-radius: 50%; border: 3px solid #7b2cbf;">
-                    </div>
-
-                    <div style="text-align: center; margin-bottom: 24px;">
-                        <h3 style="color: #6b7280; font-size: 18px; margin-bottom: 8px;">Booked for:</h3>
-                        <h2 style="color: #7b2cbf; font-size: 28px; font-weight: 700; line-height: 1.3;">Tuesday, November 5, 2025<br>2:00 PM (EST)</h2>
-                    </div>
-
-                    <div style="background: #f9fafb; padding: 20px; border-radius: 8px; margin: 24px 0;">
-                        <div style="display: grid; grid-template-columns: auto 1fr; gap: 12px 16px;">
-                            <strong style="color: #374151;">Guest:</strong>
-                            <span style="color: #6b7280;">Jane Smith</span>
-
-                            <strong style="color: #374151;">Listing:</strong>
-                            <span style="color: #6b7280;">Beautiful Downtown Apartment</span>
-
-                            <strong style="color: #374151;">Weekly Schedule:</strong>
-                            <span style="color: #6b7280;">Monday, Wednesday, Friday</span>
-
-                            <strong style="color: #374151;">Reservation Span:</strong>
-                            <span style="color: #6b7280;">4 weeks</span>
-                        </div>
-                    </div>
-
-                    <button style="width: 100%; padding: 14px 20px; background: white; border: 2px solid #7b2cbf; color: #7b2cbf; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 12px;">
-                        <span>📅</span>
-                        Click to add this meeting to your calendar
-                    </button>
-
-                    <a href="#" style="display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; color: #3b82f6; text-decoration: none; font-weight: 500;">
-                        <span>👁️</span>
-                        Google Meets Link
-                    </a>
-
-                    <p style="margin-top: 20px; font-size: 13px; color: #6b7280;">
-                        <strong>Note:</strong> The Google Calendar button generates a real calendar event URL with all meeting details.
-                    </p>
-                `
-            }
-        };
+        let selectedSlots = [];
+        let currentMonth = new Date();
+        let currentSelectedDate = null;
 
         function showView(view) {
             const modal = document.getElementById('modalOverlay');
-            const title = document.getElementById('modalTitle');
-            const body = document.getElementById('modalBody');
+            const content = document.getElementById('modalContent');
 
-            const content = viewContent[view];
-            title.textContent = content.title;
-            body.innerHTML = content.html;
+            if (view === 'respond') {
+                content.innerHTML = renderRespondView();
+            } else if (view === 'request') {
+                selectedSlots = [];
+                currentMonth = new Date();
+                content.innerHTML = renderRequestView();
+            } else if (view === 'cancel') {
+                content.innerHTML = renderCancelView();
+            } else if (view === 'details') {
+                content.innerHTML = renderDetailsView();
+            }
 
             modal.classList.add('active');
         }
 
         function closeModal() {
             document.getElementById('modalOverlay').classList.remove('active');
+            selectedSlots = [];
+            currentSelectedDate = null;
+        }
+
+        function renderRespondView() {
+            return `
+                <div class="modal-header">
+                    <h2>📋 Respond to VM Request</h2>
+                    <button class="modal-close" onclick="closeModal()">×</button>
+                </div>
+                <p style="margin-bottom: 20px; color: #6b7280;">Select one of the available dates proposed by John Doe for Jane Smith below. All times are in EST timezone.</p>
+
+                <label class="time-slot-option">
+                    <input type="radio" name="timeslot">
+                    Tuesday, November 5, 2025 at 2:00 PM (EST)
+                </label>
+                <label class="time-slot-option">
+                    <input type="radio" name="timeslot">
+                    Tuesday, November 5, 2025 at 4:00 PM (EST)
+                </label>
+                <label class="time-slot-option">
+                    <input type="radio" name="timeslot">
+                    Wednesday, November 6, 2025 at 10:00 AM (EST)
+                </label>
+
+                <div class="info-box">
+                    If none of the times work for you, you may submit alternative times for the host to choose from.
+                </div>
+
+                <div style="display: flex; gap: 12px;">
+                    <button class="button-decline" style="flex: 1;">Decline</button>
+                    <button class="button-primary" style="flex: 1;" onclick="showView('request')">Suggest Alternative Times</button>
+                </div>
+            `;
+        }
+
+        function renderRequestView() {
+            return `
+                <div class="modal-header">
+                    <h2>📅 Request Virtual Meeting</h2>
+                    <button class="modal-close" onclick="closeModal()">×</button>
+                </div>
+                <p style="margin-bottom: 20px; color: #6b7280;">Select 3 time slots when you're available to meet (EST timezone).</p>
+
+                <div class="calendar-container">
+                    ${renderCalendar()}
+                </div>
+
+                <div class="selected-slots">
+                    <strong>Selected Time Slots (${selectedSlots.length}/3):</strong>
+                    <div style="margin-top: 10px;" id="selectedSlotsList">
+                        ${selectedSlots.map((slot, i) => `
+                            <span class="slot-badge">
+                                ${formatDateTime(slot)}
+                                <button class="remove-slot" onclick="removeSlot(${i})">×</button>
+                            </span>
+                        `).join('')}
+                        ${selectedSlots.length === 0 ? '<p style="color: #9ca3af; margin: 10px 0;">Click on a date to select time slots</p>' : ''}
+                    </div>
+                </div>
+
+                <button class="button-success" ${selectedSlots.length !== 3 ? 'disabled' : ''}>
+                    Submit Request ${selectedSlots.length < 3 ? `(Select ${3 - selectedSlots.length} more)` : ''}
+                </button>
+
+                <div id="timePickerContainer"></div>
+            `;
+        }
+
+        function renderCalendar() {
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            const year = currentMonth.getFullYear();
+            const month = currentMonth.getMonth();
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            let html = `
+                <div class="calendar-header">
+                    <button class="calendar-nav-btn" onclick="changeMonth(-1)">← Prev</button>
+                    <div class="calendar-month">${monthNames[month]} ${year}</div>
+                    <button class="calendar-nav-btn" onclick="changeMonth(1)">Next →</button>
+                </div>
+                <div class="calendar-grid">
+                    <div class="calendar-day-header">Sun</div>
+                    <div class="calendar-day-header">Mon</div>
+                    <div class="calendar-day-header">Tue</div>
+                    <div class="calendar-day-header">Wed</div>
+                    <div class="calendar-day-header">Thu</div>
+                    <div class="calendar-day-header">Fri</div>
+                    <div class="calendar-day-header">Sat</div>
+            `;
+
+            // Empty cells before month starts
+            for (let i = 0; i < firstDay; i++) {
+                html += '<div class="calendar-day empty"></div>';
+            }
+
+            // Days of month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const date = new Date(year, month, day);
+                const isPast = date < today;
+                const hasSlots = selectedSlots.some(slot => {
+                    const slotDate = new Date(slot);
+                    return slotDate.getDate() === day &&
+                           slotDate.getMonth() === month &&
+                           slotDate.getFullYear() === year;
+                });
+
+                const className = `calendar-day ${isPast ? 'disabled' : ''} ${hasSlots ? 'selected' : ''}`;
+                const onClick = isPast ? '' : `onclick="selectDate(${year}, ${month}, ${day})"`;
+
+                html += `<div class="${className}" ${onClick}>${day}</div>`;
+            }
+
+            html += '</div>';
+            return html;
+        }
+
+        function changeMonth(delta) {
+            currentMonth.setMonth(currentMonth.getMonth() + delta);
+            const content = document.getElementById('modalContent');
+            content.innerHTML = renderRequestView();
+        }
+
+        function selectDate(year, month, day) {
+            currentSelectedDate = new Date(year, month, day);
+            showTimePicker();
+        }
+
+        function showTimePicker() {
+            const container = document.getElementById('timePickerContainer');
+            const dateStr = currentSelectedDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
+            // Generate time slots from 11 AM to 10 PM (EST) with 60-minute intervals
+            const timeSlots = [];
+            for (let hour = 11; hour <= 22; hour++) {
+                const date = new Date(currentSelectedDate);
+                date.setHours(hour, 0, 0, 0);
+                timeSlots.push(date);
+            }
+
+            let html = `
+                <div class="backdrop" onclick="closeTimePicker()"></div>
+                <div class="time-picker-modal">
+                    <div class="time-picker-header">Select Time for ${dateStr}</div>
+                    <div>
+                        ${timeSlots.map(slot => {
+                            const isSelected = selectedSlots.some(s => s.getTime() === slot.getTime());
+                            const className = isSelected ? 'time-slot-btn selected-time' : 'time-slot-btn';
+                            return `
+                                <button class="${className}" onclick="toggleTimeSlot(${slot.getTime()})">
+                                    ${formatTime(slot)} (EST)
+                                </button>
+                            `;
+                        }).join('')}
+                    </div>
+                    <button class="button-primary" style="width: 100%; margin-top: 16px;" onclick="closeTimePicker()">Done</button>
+                </div>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        function closeTimePicker() {
+            document.getElementById('timePickerContainer').innerHTML = '';
+            const content = document.getElementById('modalContent');
+            content.innerHTML = renderRequestView();
+        }
+
+        function toggleTimeSlot(timestamp) {
+            const date = new Date(timestamp);
+            const index = selectedSlots.findIndex(s => s.getTime() === timestamp);
+
+            if (index > -1) {
+                // Remove if already selected
+                selectedSlots.splice(index, 1);
+            } else {
+                // Add if under limit
+                if (selectedSlots.length < 3) {
+                    selectedSlots.push(date);
+                    selectedSlots.sort((a, b) => a - b);
+                }
+            }
+
+            showTimePicker(); // Refresh time picker
+        }
+
+        function removeSlot(index) {
+            selectedSlots.splice(index, 1);
+            const content = document.getElementById('modalContent');
+            content.innerHTML = renderRequestView();
+        }
+
+        function formatTime(date) {
+            return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+        }
+
+        function formatDateTime(date) {
+            const month = date.toLocaleDateString('en-US', { month: 'short' });
+            const day = date.getDate();
+            const time = formatTime(date);
+            return `${month} ${day}, ${time}`;
+        }
+
+        function renderCancelView() {
+            return `
+                <div class="modal-header">
+                    <h2>❌ Cancel Virtual Meeting?</h2>
+                    <button class="modal-close" onclick="closeModal()">×</button>
+                </div>
+                <p style="color: #dc2626; font-weight: 600; margin-bottom: 20px;">This action cannot be undone</p>
+                <div style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; background: #f9fafb; margin: 20px 0;">
+                    <div style="display: flex; gap: 15px; align-items: flex-start;">
+                        <div style="font-size: 32px;">📅</div>
+                        <div>
+                            <h4 style="color: #1f2937; margin-bottom: 8px;">Meeting with Jane Smith</h4>
+                            <p style="color: #6b7280; font-size: 14px; margin: 4px 0;">Beautiful Downtown Apartment</p>
+                            <p style="color: #7b2cbf; font-weight: 600; font-size: 14px; margin: 8px 0;">Tuesday, November 5, 2025 at 2:00 PM (EST)</p>
+                        </div>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 12px; margin-top: 24px;">
+                    <button class="button-primary" style="flex: 1; background: white; color: #3b82f6; border: 2px solid #3b82f6;" onclick="closeModal()">No</button>
+                    <button class="button-primary" style="flex: 1; background: #dc2626;" onclick="alert('Meeting cancelled!'); closeModal();">Cancel Meeting</button>
+                </div>
+            `;
+        }
+
+        function renderDetailsView() {
+            return `
+                <div class="modal-header">
+                    <h2>ℹ️ Meeting Details</h2>
+                    <button class="modal-close" onclick="closeModal()">×</button>
+                </div>
+                <div style="text-align: center; margin-bottom: 24px;">
+                    <h3 style="color: #6b7280; font-size: 18px; margin-bottom: 8px;">Booked for:</h3>
+                    <h2 style="color: #7b2cbf; font-size: 24px; font-weight: 700;">Tuesday, November 5, 2025<br>2:00 PM (EST)</h2>
+                </div>
+                <div style="background: #f9fafb; padding: 20px; border-radius: 8px; margin: 24px 0;">
+                    <div style="display: grid; grid-template-columns: auto 1fr; gap: 12px 16px;">
+                        <strong style="color: #374151;">Guest:</strong>
+                        <span style="color: #6b7280;">Jane Smith</span>
+                        <strong style="color: #374151;">Listing:</strong>
+                        <span style="color: #6b7280;">Beautiful Downtown Apartment</span>
+                        <strong style="color: #374151;">Weekly Schedule:</strong>
+                        <span style="color: #6b7280;">Monday, Wednesday, Friday</span>
+                    </div>
+                </div>
+                <button class="button-primary" style="width: 100%;">📅 Add to Google Calendar</button>
+            `;
         }
 
         // Close modal on overlay click
         document.getElementById('modalOverlay').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal();
-            }
+            if (e.target === this) closeModal();
         });
 
-        // Close modal on ESC key
+        // Close on ESC key
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeModal();
-            }
+            if (e.key === 'Escape') closeModal();
         });
     </script>
 </body>
